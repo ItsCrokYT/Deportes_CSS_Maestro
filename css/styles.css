@@ -1,0 +1,407 @@
+/* =========================================
+   1. VARIABLES DE TEMA
+   ========================================= */
+:root {
+    /* TEMA 1: ORIGINAL */
+    --color-neon: 204 255 0;    /* #ccff00 */
+    --color-dark: 15 23 42;     /* #0f172a */
+    --color-accent: 59 130 246; /* #3b82f6 */
+}
+
+/* TEMA 2: ELECTRIC BLUE */
+[data-theme="electric"] {
+    --color-neon: 6 182 212;    /* Cyan */
+    --color-dark: 10 10 10;     /* Casi Negro */
+    --color-accent: 255 255 255;/* Blanco */
+}
+
+/* TEMA 3: CLAY COURT */
+[data-theme="clay"] {
+    --color-neon: 234 88 12;
+    --color-dark: 38 38 38;
+    --color-accent: 251 146 60;
+}
+
+/* TEMA 4: WIMBLEDON */
+[data-theme="wimbledon"] {
+    --color-neon: 132 204 22;
+    --color-dark: 88 28 135;
+    --color-accent: 255 255 255;
+}
+
+/* TEMA 5: FEMME POWER */
+[data-theme="femme"] {
+    --color-neon: 236 72 153;
+    --color-dark: 46 16 101;
+    --color-accent: 249 168 212;
+}
+
+/* TEMA 6: OCEAN BREEZE */
+[data-theme="ocean"] {
+    --color-neon: 45 212 191;
+    --color-dark: 12 74 110;
+    --color-accent: 253 224 71;
+}
+
+/* TEMA 7: RED FORCE */
+[data-theme="redforce"] {
+    --color-neon: 220 38 38;
+    --color-dark: 0 0 0;
+    --color-accent: 156 163 175;
+}
+
+/* TEMA 8: FOREST PRO */
+[data-theme="forest"] {
+    --color-neon: 234 179 8;
+    --color-dark: 20 83 45;
+    --color-accent: 134 239 172;
+}
+
+/* TEMA 9: SUNSET VIBES */
+[data-theme="sunset"] {
+    --color-neon: 249 115 22;
+    --color-dark: 23 23 23;
+    --color-accent: 168 85 247;
+}
+
+/* TEMA 10: MONOCHROME */
+[data-theme="mono"] {
+    --color-neon: 255 255 255;
+    --color-dark: 0 0 0;
+    --color-accent: 107 114 128;
+}
+
+/* =========================================
+   2. ESTILOS BASE Y COMPONENTES
+   ========================================= */
+
+/* Scrollbar Personalizado */
+::-webkit-scrollbar {
+    width: 10px;
+}
+::-webkit-scrollbar-track {
+    background: rgb(var(--color-dark));
+}
+::-webkit-scrollbar-thumb {
+    background: rgb(var(--color-accent));
+    border-radius: 5px;
+}
+
+/* Swiper (Slider) Customization */
+.swiper-pagination-bullet {
+    background-color: white !important;
+    opacity: 0.5;
+}
+.swiper-pagination-bullet-active {
+    background-color: rgb(var(--color-neon)) !important;
+    opacity: 1;
+    width: 20px;
+    border-radius: 5px;
+    transition: width 0.3s;
+}
+
+@media (max-width: 768px) {
+    .swiper-button-next, .swiper-button-prev {
+        display: none !important;
+    }
+}
+
+.swiper-button-next, .swiper-button-prev {
+    color: rgb(var(--color-neon)) !important;
+    transform: scale(0.7);
+    transition: transform 0.2s;
+}
+
+/* Navbar Scroll Effect (Transparente a Sólido) */
+.nav-scrolled {
+    /* Color de fondo con opacidad usando variable */
+    background-color: rgb(var(--color-dark) / 0.95) !important; 
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+    padding-top: 1rem !important;
+    padding-bottom: 1rem !important;
+}
+
+/* Lightbox */
+#lightbox:not(.hidden) {
+    display: flex;
+}
+body.lightbox-active {
+    overflow: hidden;
+}
+.gallery-item .absolute {
+    pointer-events: none;
+}
+
+/* Animaciones Personalizadas */
+@keyframes slowZoom {
+    0% { transform: scale(1); }
+    100% { transform: scale(1.15); }
+}
+
+.animate-slow-zoom {
+    animation: slowZoom 20s infinite alternate cubic-bezier(0.4, 0, 0.2, 1);
+    will-change: transform;
+}
+
+.gallery-card-content {
+    background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.3) 60%, transparent 100%);
+}
+/* =========================================
+   CSS MAESTRO DE GALERÍAS (VERSIÓN FINAL)
+   ========================================= */
+
+/* --- CONFIGURACIÓN BASE --- */
+.gallery-master {
+    width: 100%;
+    display: block; /* Reseteo base */
+}
+
+.gallery-master .gallery-item {
+    position: relative;
+    overflow: hidden;
+    border-radius: 16px;
+    background-color: #0f172a;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.gallery-master .gallery-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.7s ease;
+}
+
+.gallery-master .gallery-item .absolute {
+    z-index: 10;
+    opacity: 0; 
+    transition: all 0.4s ease;
+}
+
+/* ===========================================================
+   ESTILOS ESPECÍFICOS PARA FUNCIONALIDAD MÓVIL (POLAROID)
+   -----------------------------------------------------------
+   Contenedor deslizable (Scroll) para miniaturas en móvil.
+   Este estilo se aplica al wrapper que crea el JS.
+   =========================================================== */
+.polaroid-scroll-wrapper {
+    display: flex;
+    gap: 12px;
+    overflow-x: auto;
+    padding: 10px 0 20px 0; /* Espacio para scroll y sombra */
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    width: 100%;
+    scrollbar-width: none; /* Firefox */
+}
+
+.polaroid-scroll-wrapper::-webkit-scrollbar {
+    display: none; /* Chrome/Safari */
+}
+
+.polaroid-scroll-wrapper .gallery-item {
+    flex: 0 0 140px; /* Ancho fijo miniatura */
+    height: 140px !important;
+    scroll-snap-align: start;
+    margin: 0 !important;
+    opacity: 0.7;
+    transform: none !important;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.polaroid-scroll-wrapper .gallery-item.active-thumb {
+    opacity: 1;
+    border: 2px solid #ccff00;
+    transform: scale(1.05);
+}
+
+/* Ajuste de la imagen principal en móvil */
+.style-polaroid.mobile-active {
+    display: flex !important;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* La imagen grande en móvil */
+.style-polaroid.mobile-active > .gallery-item:first-child {
+    width: 100%;
+    height: 400px; /* Altura fija grande en móvil */
+    margin-bottom: 5px;
+    order: -1;
+    box-shadow: 0 10px 20px -5px rgba(0,0,0,0.3);
+}
+
+/* Ocultar botón "Ver Más" si está activo el modo Polaroid */
+.style-polaroid + .text-center button#load-more-btn {
+    display: none !important;
+}
+
+
+/* ===========================================================
+   GRUPO 1: MINIMALISTAS
+   =========================================================== */
+
+/* 1. CLASSIC GRID */
+.style-classic {
+    display: grid !important;
+    grid-template-columns: 1fr; 
+    gap: 24px;
+}
+@media (min-width: 768px) { .style-classic { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 1024px) { .style-classic { grid-template-columns: repeat(3, 1fr); } }
+
+.style-classic .gallery-item {
+    aspect-ratio: 4/3;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+.style-classic .gallery-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+}
+.style-classic .gallery-item:hover .absolute { opacity: 1; }
+
+/* 2. MASONRY */
+.style-masonry {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 8px;
+}
+@media (min-width: 768px) { 
+    .style-masonry {
+        display: grid !important;
+        grid-template-columns: repeat(5, 1fr);
+        grid-template-rows: repeat(15, 1fr);
+        gap: 8px;
+        height: 800px;
+    }
+    .style-masonry .gallery-item:nth-child(1) { grid-column: span 2 / span 2; grid-row: span 5 / span 5; }
+    .style-masonry .gallery-item:nth-child(2) { grid-column: span 3 / span 3; grid-row: span 5 / span 5; grid-column-start: 3; }
+    .style-masonry .gallery-item:nth-child(3) { grid-column: span 2 / span 2; grid-row: span 5 / span 5; grid-column-start: 4; grid-row-start: 6; }
+    .style-masonry .gallery-item:nth-child(4) { grid-column: span 3 / span 3; grid-row: span 5 / span 5; grid-column-start: 1; grid-row-start: 6; }
+    .style-masonry .gallery-item:nth-child(5) { grid-column: span 2 / span 2; grid-row: span 5 / span 5; grid-row-start: 11; }
+    .style-masonry .gallery-item:nth-child(6) { grid-column: span 3 / span 3; grid-row: span 5 / span 5; grid-column-start: 3; grid-row-start: 11; }
+}
+.style-masonry .gallery-item { border-radius: 16px; overflow: hidden; height: 100%; }
+.style-masonry .gallery-item:hover .absolute { opacity: 1; }
+
+/* 3. SLIDER */
+.style-slider {
+    display: flex;
+    overflow-x: hidden; 
+    gap: 20px;
+    padding-bottom: 0;
+    white-space: nowrap;
+}
+.style-slider .gallery-item {
+    flex: 0 0 500px; 
+    aspect-ratio: 16/9;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    transform: translateZ(0); 
+}
+@media (max-width: 768px) { 
+    .style-slider .gallery-item { flex: 0 0 350px; } 
+}
+.style-slider .gallery-item .absolute { 
+    opacity: 1; 
+    background: linear-gradient(to top, rgba(0,0,0,0.8), transparent); 
+}
+
+/* 4. POLAROID (ESCRITORIO) */
+.style-polaroid {
+    display: grid !important;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); 
+    gap: 20px;
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* IMAGEN GRANDE (Posición 1) */
+.style-polaroid .gallery-item:nth-child(1) {
+    grid-column: 1 / -1; 
+    height: 600px;       
+    z-index: 5;
+    order: -1;
+    cursor: default;     
+    border: none;
+    box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
+    opacity: 1;          
+    filter: none;        
+}
+
+/* MINIATURAS */
+.style-polaroid .gallery-item:not(:nth-child(1)) {
+    height: 120px;       
+    opacity: 0.6;        
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+    filter: grayscale(60%);
+}
+
+.style-polaroid .gallery-item:not(:nth-child(1)):hover {
+    opacity: 1;
+    filter: grayscale(0%);
+    transform: translateY(-5px) scale(1.05);
+    border-color: #ccff00; 
+    box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+}
+
+/* 5. CIRCLE */
+.style-circle {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 30px;
+}
+.style-circle .gallery-item {
+    width: 250px;
+    height: 250px;
+    border-radius: 50%;
+    border: 4px solid white;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+.style-circle .gallery-item:hover {
+    transform: scale(1.05);
+    border-color: #ccff00;
+}
+.style-circle .gallery-item:hover .absolute { opacity: 1; border-radius: 50%; }
+
+/* ===========================================================
+   GRUPO 2: MODERNOS & FX
+   =========================================================== */
+.style-bento { display: grid; grid-template-columns: 1fr; gap: 16px; height: auto; }
+@media (min-width: 768px) {
+    .style-bento { grid-template-columns: repeat(4, 1fr); grid-template-rows: repeat(2, 300px); height: 600px; }
+    .style-bento .gallery-item:nth-child(1) { grid-area: 1 / 1 / 3 / 3; }
+    .style-bento .gallery-item:nth-child(2) { grid-area: 1 / 3 / 2 / 5; }
+    .style-bento .gallery-item:nth-child(3) { grid-area: 2 / 3 / 3 / 4; }
+    .style-bento .gallery-item:nth-child(4) { grid-area: 2 / 4 / 3 / 5; }
+}
+.style-bento .gallery-item .absolute { opacity: 1; }
+.style-bento .gallery-item:hover img { transform: scale(1.1); }
+
+.style-3d { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; perspective: 1000px; }
+.style-3d .gallery-item { transform-style: preserve-3d; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); }
+.style-3d .gallery-item:hover { transform: rotateX(10deg) translateY(-10px); }
+.style-3d .gallery-item .absolute { opacity: 1; }
+
+.style-neon { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; }
+.style-neon .gallery-item { border: 2px solid #3b82f6; filter: grayscale(100%); box-shadow: 0 0 10px rgba(59, 130, 246, 0.5); border-radius: 8px; }
+.style-neon .gallery-item:hover { filter: grayscale(0%); border-color: #ccff00; box-shadow: 0 0 20px #ccff00, inset 0 0 20px #ccff00; transform: scale(1.05); z-index: 10; }
+.style-neon .gallery-item .absolute { opacity: 1; }
+
+.style-hexagon { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; padding: 20px; }
+.style-hexagon .gallery-item { width: 280px; height: 320px; clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%); margin-bottom: -80px; transition: transform 0.3s; }
+.style-hexagon .gallery-item:hover { transform: scale(1.1); z-index: 20; }
+.style-hexagon .gallery-item .absolute { opacity: 0; }
+.style-hexagon .gallery-item:hover .absolute { opacity: 1; }
+
+.style-stack { display: flex; flex-direction: column; align-items: center; gap: 50px; padding-bottom: 50px; }
+.style-stack .gallery-item { width: 90%; max-width: 800px; height: 450px; position: sticky; top: 120px; box-shadow: 0 -20px 40px rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); }
+.style-stack .gallery-item:nth-child(1) { top: 100px; transform: rotate(-1deg); }
+.style-stack .gallery-item:nth-child(2) { top: 130px; transform: rotate(1deg); }
+.style-stack .gallery-item:nth-child(3) { top: 160px; transform: rotate(-0.5deg); }
+.style-stack .gallery-item:nth-child(4) { top: 190px; transform: rotate(0.5deg); }
