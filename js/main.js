@@ -94,54 +94,55 @@ document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') closeLightbox();
 });
 
-// 6. GESTOR DE CLICS (Interacción Unificada)
+// 6. GESTOR UNIFICADO DE CLICS
 document.addEventListener('click', (e) => {
     const item = e.target.closest('.gallery-item');
-    if (!item) return;
+    if (!item) return; 
 
     const container = item.parentElement.closest('.style-polaroid') || item.parentElement;
 
-    // A) GALERÍA POLAROID (Intercambio)
+    // A) POLAROID (Intercambio)
     if (container.classList.contains('style-polaroid')) {
         const wrapper = container.querySelector('.polaroid-scroll-wrapper');
-        const mainImage = container.children[0]; // La imagen grande siempre es la 1ra
+        const mainImage = container.children[0]; 
         
-        // Si hay wrapper (modo móvil), el item está dentro del wrapper
+        // MODO MÓVIL (Wrapper existe)
         if (wrapper && wrapper.contains(item)) {
-             // Lógica Móvil (Intercambio visual sin mover DOM para no romper scroll)
              const bigImg = mainImage.querySelector('img');
              const smallImg = item.querySelector('img');
              const bigSrc = bigImg.src;
              const smallSrc = smallImg.src;
              
-             // Animación
              mainImage.style.opacity = '0.5';
              setTimeout(() => {
                  bigImg.src = smallSrc;
                  mainImage.style.opacity = '1';
              }, 200);
 
-             // Actualizar estado visual activo
              wrapper.querySelectorAll('.gallery-item').forEach(el => el.classList.remove('active-thumb'));
              item.classList.add('active-thumb');
-
              return;
         }
 
-        // Lógica Escritorio (Intercambio real DOM)
+        // MODO ESCRITORIO (Sin wrapper)
         if (!wrapper && container.children[0] !== item) {
+            // Fade Out
             item.style.opacity = '0';
             item.style.transform = 'scale(0.8)';
-            container.children[0].style.opacity = '0';
+            const currentBig = container.children[0];
+            currentBig.style.opacity = '0';
+
             setTimeout(() => {
+                // Intercambio de contenido
                 const tempHTML = container.children[0].innerHTML;
                 container.children[0].innerHTML = item.innerHTML;
                 item.innerHTML = tempHTML;
+                
+                // Restaurar
                 container.children[0].style.opacity = '1';
                 item.style.opacity = '0.6';
                 item.style.transform = 'scale(1)';
             }, 250);
-            return;
         }
         return; 
     }
@@ -221,8 +222,19 @@ bookingModal.addEventListener('click', (e) => { if (e.target === bookingModal) c
 
 // 9. SWIPER MEMBRESÍAS
 const swiperMemberships = new Swiper(".memberships-swiper", {
-    slidesPerView: 1.2, spaceBetween: 20, centeredSlides: true, initialSlide: 1, 
-    breakpoints: { 768: { slidesPerView: 3, spaceBetween: 30, centeredSlides: false, initialSlide: 0, allowTouchMove: false } },
+    slidesPerView: 1.2, 
+    spaceBetween: 20,
+    centeredSlides: true,
+    initialSlide: 1, 
+    breakpoints: {
+        768: {
+            slidesPerView: 3, 
+            spaceBetween: 30,
+            centeredSlides: false,
+            initialSlide: 0,
+            allowTouchMove: false 
+        }
+    },
     pagination: { el: ".swiper-pagination", clickable: true },
     on: {
         slideChange: function () {
@@ -278,7 +290,7 @@ function handleScrollAnimation() {
 window.addEventListener('scroll', handleScrollAnimation);
 window.addEventListener('resize', () => {
     handleScrollAnimation();
-    handlePolaroidMobileLayout(); // Re-chequear layout al cambiar tamaño
+    handlePolaroidMobileLayout();
 });
 handleScrollAnimation();
 
@@ -301,9 +313,13 @@ function setGalleryStyle(galleryId, styleName) {
 
     if (styleName === 'style-slider') initGalleryTicker(galleryContainer, galleryId);
     if (styleName === 'style-polaroid') {
-        // Ejecutar inmediatamente y configurar listener
         handlePolaroidMobileLayout();
     }
+    
+    // SOLUCIÓN CLAVE: Forzar refresco de AOS cuando se cambia el estilo
+    setTimeout(() => {
+        if (typeof AOS !== 'undefined') AOS.refresh();
+    }, 200);
 }
 
 function initGalleryTicker(container, id) {
@@ -332,46 +348,48 @@ function handlePolaroidMobileLayout() {
     let scrollWrapper = polaroidContainer.querySelector('.polaroid-scroll-wrapper');
     const loadMoreBtn = document.getElementById('load-more-btn');
 
-    // Ocultar siempre el botón en este modo
     if (loadMoreBtn) loadMoreBtn.style.display = 'none';
 
     if (isMobile) {
         polaroidContainer.classList.add('mobile-active');
-        
-        // Si no existe el wrapper, crearlo y mover los elementos
         if (!scrollWrapper) {
             scrollWrapper = document.createElement('div');
             scrollWrapper.className = 'polaroid-scroll-wrapper';
-            
-            // Mover todos los hijos EXCEPTO el primero (imagen grande)
             const items = Array.from(polaroidContainer.children);
             items.forEach((item, index) => {
-                if (index !== 0) { // Saltar el primero
-                    // Aseguramos que sean visibles (quitar hidden md:block si existen)
-                    item.classList.remove('hidden', 'md:block'); 
+                if (index !== 0) { 
+                    item.classList.remove('hidden', 'md:block', 'md:hidden');
+                    item.style.display = 'block'; 
                     scrollWrapper.appendChild(item);
                 }
             });
-            
             polaroidContainer.appendChild(scrollWrapper);
         }
     } else {
         polaroidContainer.classList.remove('mobile-active');
-        
-        // Si existe el wrapper en escritorio, deshacerlo (devolver items al grid)
         if (scrollWrapper) {
             const items = Array.from(scrollWrapper.children);
             items.forEach(item => {
-                // Restaurar clases de visibilidad originales si se desea, o dejarlas visibles
                 polaroidContainer.appendChild(item);
             });
             scrollWrapper.remove();
         }
     }
+    
+    // Refrescar AOS también al cambiar layout móvil
+    setTimeout(() => {
+        if (typeof AOS !== 'undefined') AOS.refresh();
+    }, 200);
 }
 
 // --- CONFIGURACIÓN INICIAL ---
 document.addEventListener('DOMContentLoaded', () => {
-    setGalleryStyle('galeria-1', 'style-classic'); 
+    setGalleryStyle('galeria-1', 'style-polaroid'); 
     setGalleryStyle('galeria-2', 'style-bento'); 
+});
+
+window.addEventListener('load', () => {
+    if (typeof AOS !== 'undefined') {
+        AOS.refresh();
+    }
 });
