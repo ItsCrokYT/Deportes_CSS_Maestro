@@ -6,7 +6,7 @@ AOS.init({
     offset: 100
 });
 
-// 2. Swiper Config
+// 2. Swiper Config (Slider Principal)
 const swiper = new Swiper(".mySwiper", {
     direction: "horizontal",
     loop: true,
@@ -225,13 +225,13 @@ const swiperMemberships = new Swiper(".memberships-swiper", {
     slidesPerView: 1.2, 
     spaceBetween: 20,
     centeredSlides: true,
-    initialSlide: 1, 
+    initialSlide: 1, // Inicia en el slide del medio
     breakpoints: {
         768: {
             slidesPerView: 3, 
             spaceBetween: 30,
             centeredSlides: false,
-            initialSlide: 0,
+            initialSlide: 0, // En PC empieza en el 0 para ver los 3
             allowTouchMove: false 
         }
     },
@@ -245,11 +245,12 @@ const swiperMemberships = new Swiper(".memberships-swiper", {
                 if (activeCard) selectPlan(activeCard);
             }
         },
+        // FIX: Forzar selección del slide 1 (Master Club) al iniciar
         init: function() {
-            const activeIndex = this.activeIndex;
             const slides = document.querySelectorAll('.memberships-swiper .swiper-slide');
-            if (slides[activeIndex]) {
-                const activeCard = slides[activeIndex].querySelector('.plan-card');
+            // Seleccionamos el slide[1] que es el del medio
+            if (slides[1]) {
+                const activeCard = slides[1].querySelector('.plan-card');
                 if (activeCard) selectPlan(activeCard);
             }
         }
@@ -316,7 +317,6 @@ function setGalleryStyle(galleryId, styleName) {
         handlePolaroidMobileLayout();
     }
     
-    // SOLUCIÓN CLAVE: Forzar refresco de AOS cuando se cambia el estilo
     setTimeout(() => {
         if (typeof AOS !== 'undefined') AOS.refresh();
     }, 200);
@@ -339,7 +339,7 @@ function initGalleryTicker(container, id) {
     galleryTickers[id] = ticker;
 }
 
-// 12. LÓGICA MÓVIL POLAROID (Cinta deslizable)
+// 12. LÓGICA MÓVIL POLAROID
 function handlePolaroidMobileLayout() {
     const polaroidContainer = document.querySelector('.style-polaroid');
     if (!polaroidContainer) return;
@@ -376,13 +376,11 @@ function handlePolaroidMobileLayout() {
         }
     }
     
-    // Refrescar AOS también al cambiar layout móvil
     setTimeout(() => {
         if (typeof AOS !== 'undefined') AOS.refresh();
     }, 200);
 }
 
-// --- CONFIGURACIÓN INICIAL ---
 document.addEventListener('DOMContentLoaded', () => {
     setGalleryStyle('galeria-1', 'style-polaroid'); 
     setGalleryStyle('galeria-2', 'style-bento'); 
