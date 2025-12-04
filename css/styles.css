@@ -154,7 +154,7 @@ body.lightbox-active {
 /* --- CONFIGURACIÓN BASE --- */
 .gallery-master {
     width: 100%;
-    display: block; /* Reseteo base */
+    display: block;
 }
 
 .gallery-master .gallery-item {
@@ -163,6 +163,7 @@ body.lightbox-active {
     border-radius: 16px;
     background-color: #0f172a;
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    display: block !important; 
 }
 
 .gallery-master .gallery-item img {
@@ -181,63 +182,54 @@ body.lightbox-active {
 
 /* ===========================================================
    ESTILOS ESPECÍFICOS PARA FUNCIONALIDAD MÓVIL (POLAROID)
-   -----------------------------------------------------------
-   Contenedor deslizable (Scroll) para miniaturas en móvil.
-   Este estilo se aplica al wrapper que crea el JS.
    =========================================================== */
 .polaroid-scroll-wrapper {
-    display: flex;
+    display: flex !important;
     gap: 12px;
     overflow-x: auto;
-    padding: 10px 0 20px 0; /* Espacio para scroll y sombra */
+    padding: 10px 0 20px 0;
     scroll-snap-type: x mandatory;
     -webkit-overflow-scrolling: touch;
     width: 100%;
-    scrollbar-width: none; /* Firefox */
+    scrollbar-width: none;
 }
 
 .polaroid-scroll-wrapper::-webkit-scrollbar {
-    display: none; /* Chrome/Safari */
+    display: none;
 }
 
 .polaroid-scroll-wrapper .gallery-item {
-    flex: 0 0 140px; /* Ancho fijo miniatura */
+    flex: 0 0 140px;
     height: 140px !important;
     scroll-snap-align: start;
     margin: 0 !important;
     opacity: 0.7;
     transform: none !important;
-    border-radius: 12px;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    display: block !important;
 }
 
 .polaroid-scroll-wrapper .gallery-item.active-thumb {
     opacity: 1;
     border: 2px solid #ccff00;
-    transform: scale(1.05);
+    transform: scale(1.05) !important;
 }
 
-/* Ajuste de la imagen principal en móvil */
 .style-polaroid.mobile-active {
     display: flex !important;
     flex-direction: column;
     gap: 10px;
 }
 
-/* La imagen grande en móvil */
 .style-polaroid.mobile-active > .gallery-item:first-child {
     width: 100%;
-    height: 400px; /* Altura fija grande en móvil */
+    height: 400px !important;
     margin-bottom: 5px;
     order: -1;
-    box-shadow: 0 10px 20px -5px rgba(0,0,0,0.3);
 }
 
-/* Ocultar botón "Ver Más" si está activo el modo Polaroid */
 .style-polaroid + .text-center button#load-more-btn {
     display: none !important;
 }
-
 
 /* ===========================================================
    GRUPO 1: MINIMALISTAS
@@ -264,13 +256,12 @@ body.lightbox-active {
 
 /* 2. MASONRY */
 .style-masonry {
-    display: grid;
+    display: grid !important;
     grid-template-columns: 1fr;
     gap: 8px;
 }
 @media (min-width: 768px) { 
     .style-masonry {
-        display: grid !important;
         grid-template-columns: repeat(5, 1fr);
         grid-template-rows: repeat(15, 1fr);
         gap: 8px;
@@ -288,7 +279,7 @@ body.lightbox-active {
 
 /* 3. SLIDER */
 .style-slider {
-    display: flex;
+    display: flex !important;
     overflow-x: hidden; 
     gap: 20px;
     padding-bottom: 0;
@@ -308,7 +299,7 @@ body.lightbox-active {
     background: linear-gradient(to top, rgba(0,0,0,0.8), transparent); 
 }
 
-/* 4. POLAROID (ESCRITORIO) */
+/* 4. POLAROID */
 .style-polaroid {
     display: grid !important;
     grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); 
@@ -317,8 +308,6 @@ body.lightbox-active {
     max-width: 1200px;
     margin: 0 auto;
 }
-
-/* IMAGEN GRANDE (Posición 1) */
 .style-polaroid .gallery-item:nth-child(1) {
     grid-column: 1 / -1; 
     height: 600px;       
@@ -327,11 +316,9 @@ body.lightbox-active {
     cursor: default;     
     border: none;
     box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
-    opacity: 1;          
+    opacity: 1 !important;          
     filter: none;        
 }
-
-/* MINIATURAS */
 .style-polaroid .gallery-item:not(:nth-child(1)) {
     height: 120px;       
     opacity: 0.6;        
@@ -340,7 +327,6 @@ body.lightbox-active {
     border: 2px solid transparent;
     filter: grayscale(60%);
 }
-
 .style-polaroid .gallery-item:not(:nth-child(1)):hover {
     opacity: 1;
     filter: grayscale(0%);
@@ -348,10 +334,18 @@ body.lightbox-active {
     border-color: #ccff00; 
     box-shadow: 0 10px 20px rgba(0,0,0,0.2);
 }
+@media (max-width: 768px) {
+    .style-polaroid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+    }
+    .style-polaroid .gallery-item:nth-child(1) { height: 350px; }
+    .style-polaroid .gallery-item:not(:nth-child(1)) { height: 90px; }
+}
 
 /* 5. CIRCLE */
 .style-circle {
-    display: flex;
+    display: flex !important;
     flex-wrap: wrap;
     justify-content: center;
     gap: 30px;
@@ -372,7 +366,7 @@ body.lightbox-active {
 /* ===========================================================
    GRUPO 2: MODERNOS & FX
    =========================================================== */
-.style-bento { display: grid; grid-template-columns: 1fr; gap: 16px; height: auto; }
+.style-bento { display: grid !important; grid-template-columns: 1fr; gap: 16px; height: auto; }
 @media (min-width: 768px) {
     .style-bento { grid-template-columns: repeat(4, 1fr); grid-template-rows: repeat(2, 300px); height: 600px; }
     .style-bento .gallery-item:nth-child(1) { grid-area: 1 / 1 / 3 / 3; }
@@ -383,23 +377,75 @@ body.lightbox-active {
 .style-bento .gallery-item .absolute { opacity: 1; }
 .style-bento .gallery-item:hover img { transform: scale(1.1); }
 
-.style-3d { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; perspective: 1000px; }
+.style-3d { display: grid !important; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; perspective: 1000px; }
 .style-3d .gallery-item { transform-style: preserve-3d; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); }
 .style-3d .gallery-item:hover { transform: rotateX(10deg) translateY(-10px); }
 .style-3d .gallery-item .absolute { opacity: 1; }
 
-.style-neon { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; }
-.style-neon .gallery-item { border: 2px solid #3b82f6; filter: grayscale(100%); box-shadow: 0 0 10px rgba(59, 130, 246, 0.5); border-radius: 8px; }
-.style-neon .gallery-item:hover { filter: grayscale(0%); border-color: #ccff00; box-shadow: 0 0 20px #ccff00, inset 0 0 20px #ccff00; transform: scale(1.05); z-index: 10; }
+/* 8. NEON GLITCH (MODIFICADO: Grid 8x5 Asimétrico) */
+.style-neon { 
+    display: grid !important; 
+    gap: 8px; 
+    /* Móvil: 2 columnas por defecto para que no se rompa */
+    grid-template-columns: repeat(2, 1fr); 
+}
+
+@media (min-width: 768px) {
+    .style-neon {
+        grid-template-columns: repeat(8, 1fr);
+        grid-template-rows: repeat(5, 1fr);
+        height: 600px; /* Altura necesaria para el grid */
+    }
+    
+    /* .div1 */
+    .style-neon .gallery-item:nth-child(1) {
+        grid-column: span 2 / span 2;
+        grid-row: span 5 / span 5;
+    }
+    /* .div2 */
+    .style-neon .gallery-item:nth-child(2) {
+        grid-column: span 2 / span 2;
+        grid-row: span 5 / span 5;
+        grid-column-start: 3;
+    }
+    /* .div3 */
+    .style-neon .gallery-item:nth-child(3) {
+        grid-column: span 2 / span 2;
+        grid-row: span 5 / span 5;
+        grid-column-start: 5;
+    }
+    /* .div4 */
+    .style-neon .gallery-item:nth-child(4) {
+        grid-column: span 2 / span 2;
+        grid-row: span 5 / span 5;
+        grid-column-start: 7;
+    }
+}
+
+/* Estilos Visuales Neon (Conservados) */
+.style-neon .gallery-item { 
+    border: 2px solid #3b82f6; 
+    filter: grayscale(100%); 
+    box-shadow: 0 0 10px rgba(59, 130, 246, 0.5); 
+    border-radius: 8px; 
+    background-color: #000;
+}
+.style-neon .gallery-item:hover { 
+    filter: grayscale(0%); 
+    border-color: #ccff00; 
+    box-shadow: 0 0 20px #ccff00, inset 0 0 20px #ccff00; 
+    transform: scale(1.05); 
+    z-index: 10; 
+}
 .style-neon .gallery-item .absolute { opacity: 1; }
 
-.style-hexagon { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; padding: 20px; }
+.style-hexagon { display: flex !important; flex-wrap: wrap; justify-content: center; gap: 10px; padding: 20px; }
 .style-hexagon .gallery-item { width: 280px; height: 320px; clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%); margin-bottom: -80px; transition: transform 0.3s; }
 .style-hexagon .gallery-item:hover { transform: scale(1.1); z-index: 20; }
 .style-hexagon .gallery-item .absolute { opacity: 0; }
 .style-hexagon .gallery-item:hover .absolute { opacity: 1; }
 
-.style-stack { display: flex; flex-direction: column; align-items: center; gap: 50px; padding-bottom: 50px; }
+.style-stack { display: flex !important; flex-direction: column; align-items: center; gap: 50px; padding-bottom: 50px; }
 .style-stack .gallery-item { width: 90%; max-width: 800px; height: 450px; position: sticky; top: 120px; box-shadow: 0 -20px 40px rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); }
 .style-stack .gallery-item:nth-child(1) { top: 100px; transform: rotate(-1deg); }
 .style-stack .gallery-item:nth-child(2) { top: 130px; transform: rotate(1deg); }
