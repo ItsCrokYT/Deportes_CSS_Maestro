@@ -372,6 +372,6 @@ function handlePolaroidMobileLayout() {
 
 // --- CONFIGURACIÓN INICIAL ---
 document.addEventListener('DOMContentLoaded', () => {
-    setGalleryStyle('galeria-1', 'style-polaroid'); 
+    setGalleryStyle('galeria-1', 'style-classic'); 
     setGalleryStyle('galeria-2', 'style-bento'); 
 });
